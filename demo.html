@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>密码加密3种方式</title>
+  <script type="text/javascript" src="js/jquery.js"></script>
+  <script type="text/ecmascript" src="js/sha1.js"></script>
+  <script type="text/ecmascript" src="js/base64.min.js"></script>
+  <script type="text/ecmascript" src="js/md5.js"></script>
+  <style>
+    body{padding:20px 20px 0;}
+    header{ text-align: center; font-size: 30px; font-weight: bold;}
+    h3{color: #410f74; padding:10px 0 0;}
+    p{ color: #37f;}
+    .box input:last-child{ width: 300px;}
+  </style>
+</head>
+
+<body>
+  <header>前端几种加密算法的简单使用与对比</header>
+  <!--MD5-->
+<h3>Md5:</h3>
+<div class="box">
+    <label>待加密文本:</label>
+    <input class="text" id="test1" value="123abd">
+    <button id="doMd5">加密</button>
+    <label>加密后:</label>
+    <input class="text" id="md5" disabled="disabled">
+</div>
+<!--MD5-->
+
+<!--base64-->
+<h3>Base64:</h3>
+<div>
+    <label>待加密文本:</label>
+    <input class="text" id="test2" value="123abd">
+    <button id="doBase64">加密&解密</button>
+    <label>加密后:</label>
+    <input class="text" id="enbase64" disabled="disabled">
+    <label>解密后:</label>
+    <input class="text" id="debase64" disabled="disabled">
+</div>
+<!--base64-->
+
+<!--Sha1-->
+<h3>Sha1:</h3>
+<div class="box">
+    <label>待加密文本:</label>
+    <input class="text" id="test3" value="123abd">
+    <button id="doSha1">加密</button>
+    <label>加密后:</label>
+    <input class="text" id="sha1" disabled="disabled">
+</div>
+<!--Sha1-->
+<div>
+    <h3>SHA-1与MD5的比较</h3>
+    散列算法<br/><br/>
+    用途：主要用于验证，防止信息被修。具体用途如：文件校验、数字签名、鉴权协议。<br/><br/>
+    MD5：MD5是一种不可逆的加密算法，目前是最牢靠的加密算法之一，尚没有能够逆运算的程序被开发出来，它对应任何字符串都可以加密成一段唯一的固定长度的代码。<br/>
+    SHA1：是由NISTNSA设计为同DSA一起使用的，它对长度小于264的输入，产生长度为160bit的散列值，因此抗穷举(brute-force)性更好。SHA-1设计时基于和MD4相同原理,并且模仿了该算法。SHA-1是由美国标准技术局（NIST）颁布的国家标准，是一种应用最为广泛的Hash函数算法，也是目前最先进的加密技术，被政府部门和私营业主用来处理敏感的信息。而SHA-1基于MD5，MD5又基于MD4。<br/><br/>
+
+    <strong>
+        MD5与SHA1都是Hash算法，MD5输出是128位的，SHA1输出是160位的，MD5比SHA1快，SHA1比MD5强度高。<br/>
+        Hash是一种特殊的算法，MD5就是其中常用的一种。
+    </strong>
+    
+   <p> SHA-1和MD5彼此很相似。相应的，他们的强度和其他特性也是相似，但还有以下几点不同：</p>
+    1、 对强行攻击的安全性：最显著和最重要的区别是SHA-1摘要比MD5摘要长32 位。使用强行技术，产生任何一个报文使其摘要等于给定报摘要的难度对MD5是2^128数量级的操作，而对SHA-1则是2^160数量级的操作。这样，SHA-1对强行攻击有更大的强度。 <br/>
+    2、 对密码分析的安全性：由于MD5的设计，易受密码分析的攻击，SHA-1显得不易受这样的攻击。 <br/>
+    3、速度：在相同的硬件上，SHA-1的运行速度比MD5慢。
+
+    <p>以一个60M的文件为测试样本，经过1000次的测试平均值，三种算法的表现为：</p>
+    MD5算法运行1000次的平均时间为：226ms<br/>
+    SHA1算法运行1000次的平均时间为：308ms<br/>
+    SHA2(SHA256)算法运行1000次的平均时间为：473ms.<br/>
+    安全性方面，显然SHA256（又称SHA2）的安全性最高，但是耗时要比其他两种多很多。MD5相对较容易碰撞，因此，SHA1应该是这三种中性能最好的一款加密算法。
+
+    <h3>Base64</h3>
+    Base64：其实不是安全领域下的加密解密算法，只能算是一个编码算法，通常用于把二进制数据编码为可写的字符形式的数据，对数据内容进行编码来适合传输(可以对img图像编码用于传输)。这是一种可逆的编码方式。
+</div>
+</body>
+
+<script type="text/javascript">
+$(function(){
+  $("#doMd5").click(
+      function () {
+          var test1Val = $("#test1").val();
+          var hash = md5.create();
+          hash.update(test1Val);
+          var result =  hash.hex();
+          $("#md5").val(result);
+      });
+
+  $("#doBase64").click(
+      function () {
+          var test2Val = $("#test2").val();
+          //加密
+          var hash = Base64.encode(test2Val);
+          $("#enbase64").val(hash);
+          //解密
+          var str = Base64.decode(hash);
+          $("#debase64").val(str);
+      });
+
+  $("#doSha1").click(
+      function () {
+          var test3Val = $("#test3").val();
+          var hash = sha1(test3Val);
+          $("#sha1").val(hash);
+      });
+})
+  
+
+ 
+</script>
+
+</html>
